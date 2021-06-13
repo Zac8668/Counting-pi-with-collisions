@@ -43,8 +43,8 @@ fn collision(block1: &Block, block2: &Block) -> (f64, f64) {
 
 #[macroquad::main("CalculatingPi")]
 async fn main() {
-    let digits: i32 = 6;
-    let acc: i32 = 5000000;
+    let digits: i32 = 3;
+    let acc: i32 = 50;
     let mut collisions: i32 = 0;
     let mut done: bool = false;
 
@@ -52,7 +52,7 @@ async fn main() {
         color: RED,
         mass: 1.00,
         vel: 0.00,
-        size: 10,
+        size: 50,
         x: 100.00,
     };
 
@@ -66,37 +66,37 @@ async fn main() {
 
     loop {
         clear_background(DARKGRAY);
-        if !done {
-            for _n in 0..acc {
-                block1.update_block();
-                block2.update_block();
+        for _n in 0..acc {
+            block1.update_block();
+            block2.update_block();
 
-                if check_collision(&block1, &block2) {
-                    let new_vel = collision(&block1, &block2);
-                    block1.vel = new_vel.0;
-                    block2.vel = new_vel.1;
-                    collisions += 1;
-                };
+            if check_collision(&block1, &block2) {
+                let new_vel = collision(&block1, &block2);
+                block1.vel = new_vel.0;
+                block2.vel = new_vel.1;
+                collisions += 1;
+            };
 
-                if block1.x <= 20.00 {
-                    block1.vel *= -1.00;
-                    collisions += 1;
-                };
-            }
-
-            if block2.x < block1.size as f64 + 20.00 {
-                block2.x = block1.size as f64 + 20.00;
-            }
-
-            if block1.vel > 0.00 && block2.vel > 0.00 && block2.vel > block1.vel {
-                done = true;
-            }
+            if block1.x <= 20.00 {
+                block1.vel *= -1.00;
+                collisions += 1;
+            };
         }
 
-        draw_text(&collisions.to_string(), 50.0, 50.0, 60.0, GRAY);
-        draw_text(&get_fps().to_string(), 50.0, 100.0, 60.0, GRAY);
+        if block2.x < block1.size as f64 + 20.00 {
+            block2.x = block1.size as f64 + 20.00;
+        }
+
+        if block1.vel > 0.00 && block2.vel > 0.00 && block2.vel > block1.vel {
+            done = true;
+        }
         draw_block(&block1);
         draw_block(&block2);
+        draw_text(&("Collisions: ".to_string() + &collisions.to_string()), 10.0, 50.0, 60.0, GRAY);
+        draw_text(&("Fps: ".to_string() + &get_fps().to_string()), 10.0, 100.0, 60.0, GRAY);
+        if done {
+            draw_text("Done!", 10.0, 150.0, 60.0, GRAY);
+        }
 
         next_frame().await
     }
