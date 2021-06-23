@@ -1,4 +1,4 @@
-# counting-pi-with-collisions
+# counting pi with collisions
 This program calculates pi with counting, and with purely elastic collisions, based on the amazing video from 3Blue1Brown.
 Made while learning and trying Rust
 
